@@ -27,7 +27,7 @@
 ## Environment Overview
 
 ### Network Diagram
-![AD Homelab Network Diagram](images/AD_Homelab_Network.png)
+![AD Homelab Network Diagram](AD_Homelab_Network.png)
 
 **Network Configuration:**
 - **Subnet:** 172.29.144.0/20
