@@ -28,7 +28,7 @@
 
 ### Network Diagram
 ![AD Homelab Network Diagram](AD_Homelab_Network.png)
-<img src="AD_Homelab_Network.png" alt="Install AD DS" width="700">
+<img src="AD_Homelab_Network.png" alt="Install AD DS" length="700">
 
 **Network Configuration:**
 - **Subnet:** 172.29.144.0/20
