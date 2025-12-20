@@ -34,7 +34,7 @@
 - **Domain Controller IP:** 172.29.144.10 (Static)
 - **Client Workstation IP:** 172.29.144.20 (Static)
 - **Host Machine IP:** 172.29.144.1
-- **Domain Name:** [yourdomain.local]
+- **Domain Name:** HELPLAB.local
 
 ### Hardware & Virtualization Specifications
 
@@ -43,22 +43,22 @@
 - **CPU:** 4 cores / 8 threads
 - **Storage:** 1 TB SSD
 - **Hypervisor:** Microsoft Hyper-V
-- **Operating System:** [Windows 10/11 Pro]
+- **Operating System:** Windows 11 Pro
 
 #### Domain Controller VM (Windows Server 2022)
-- **Hostname:** [DC01]
+- **Hostname:** WIN-MEUJ3KPDEG5
 - **Operating System:** Windows Server 2022 Standard
 - **RAM:** 4 GB
-- **vCPU:** [2 cores]
+- **vCPU:** 4 cores
 - **Storage:** 60 GB virtual disk
 - **Network:** Hyper-V Default Switch
 - **IP Address:** 172.29.144.10/20 (Static, no gateway)
 
 #### Client Workstation VM (Windows 11 Pro)
-- **Hostname:** [CLIENT01]
+- **Hostname:** WIN11-CLI-01
 - **Operating System:** Windows 11 Pro
 - **RAM:** 4 GB
-- **vCPU:** [2 cores]
+- **vCPU:** 4 cores
 - **Storage:** 60 GB virtual disk
 - **Network:** Hyper-V Default Switch
 - **IP Address:** 172.29.144.20/20 (Static, no gateway)
@@ -78,23 +78,30 @@ The Domain Controller hosts multiple roles:
 ### 1. Installing Active Directory Domain Services
 
 #### Step 1: Add the AD DS Role
-![Install AD DS - Server Manager](Setup_Screenshots/Install_AD_01.png)
+![Open Server Manager](Setup_Screenshots/Install_AD_01.png)
 *Open Server Manager and click "Add roles and features"*
 
-![Select Role-based Installation](Setup_Screenshots/Install_AD_02.png)
-*Choose "Role-based or feature-based installation" and select your server*
+![Click Manage](Setup_Screenshots/Install_AD_02.png)
+*Click Manage in the upper right-hand corner and select "Add roles and features"*
 
-![Select AD DS Role](Setup_Screenshots/Install_AD_03.png)
-*Check "Active Directory Domain Services" and add required features*
+![Before you Begin](Setup_Screenshots/Install_AD_03.png)
+*Select Next*
 
-![Confirm Installation](Setup_Screenshots/Install_AD_04.png)
-*Review selections and click "Install"*
+![Installation Type](Setup_Screenshots/Install_AD_04.png)
+*Select "Role-based or feature-based installation" and click "Next"*
 
-![Installation Progress](Setup_Screenshots/Install_AD_05.png)
-*Wait for the installation to complete*
+![Server Selection](Setup_Screenshots/Install_AD_05.png)
+*Click "Select a server from server pool" and select intended server from server pool. Click "Next"*
 
-![Installation Complete](Setup_Screenshots/Install_AD_06.png)
-*Installation successful - proceed to DC promotion*
+![Server Roles](Setup_Screenshots/Install_AD_06.png)
+*Ensure both roles: "Active Directory Domain Services" and "DNS Server" are checked. Click "Next"*
+
+![Features](Setup_Screenshots/Install_AD_07.png)
+*Ensure that "Group Policy Management" is checked. Click "Next".*
+
+#### Final Steps:
+*Confirm the installation selections and click "Install".*
+*Once installation is successful, proceed to DC promotion.*
 
 ---
 
@@ -102,7 +109,7 @@ The Domain Controller hosts multiple roles:
 
 #### Step 1: Post-Deployment Configuration
 ![Promote to DC - Notification](Setup_Screenshots/Promote_DC_01.png)
-*Click the notification flag and select "Promote this server to a domain controller"*
+*Select "Promote this server to a domain controller"*
 
 #### Step 2: Deployment Configuration
 ![New Forest Configuration](Setup_Screenshots/Promote_DC_02.png)
@@ -125,25 +132,26 @@ The Domain Controller hosts multiple roles:
 To configure the DC as the primary DNS server for the network:
 
 ![Control Panel - Network Connections](Setup_Screenshots/DNS_setup_01.png)
-*Navigate to Control Panel > Network and Internet > Network Connections*
+*Navigate to Control Panel > Network and Internet*
 
 ![Adapter Properties](Setup_Screenshots/DNS_setup_02.png)
-*Right-click the network adapter and select "Properties"*
+*Navigate to Network and Sharing Center*
 
 ![IPv4 Properties](Setup_Screenshots/DNS_setup_03.png)
-*Select "Internet Protocol Version 4 (TCP/IPv4)" and click "Properties"*
+*Select "Change adapter settings" in the side panel*
 
 ![DNS Server Settings](Setup_Screenshots/DNS_setup_04.png)
-*Set "Preferred DNS server" to the DC's IP address (172.29.144.10)*
+*Double-click "Ethernet"*
 
 ![Verify DNS Settings](Setup_Screenshots/DNS_setup_05.png)
-*Click "OK" to apply settings*
+*Select "Properties"*
 
 ![Test DNS Resolution](Setup_Screenshots/DNS_setup_06.png)
-*Open Command Prompt and run `nslookup` to verify DNS resolution*
+*Select "Internet Protocol Version 4 (TCP/IPv4)" and click "Properties"*
 
 ![DNS Manager Console](Setup_Screenshots/DNS_setup_07.png)
-*Open DNS Manager to verify forward and reverse lookup zones*
+*Enter in desired static ip address and subnet mask. Leave default gateway empty. Set preferred DNS server to 127.0.0.1 .*
+*Click "OK" and run `nslookup` in command prompt to verify DNS resolution*
 
 ---
 
@@ -151,48 +159,38 @@ To configure the DC as the primary DNS server for the network:
 
 ### Organizational Unit (OU) Design
 
-![OU Structure Diagram](images/AD_User_Computers_diagram.png)
+![OU Structure Diagram](AD_User_Computers_diagram.png)
 
 #### Design Rationale
-[Explain your OU structure here. Example:]
 
-The OU structure is designed to mirror a typical small business organization:
+The OU structure is designed to mirror a typical small business organization.
+Three-Tier Organizational Structure:
+1. _Users OU
+- Contains all user accounts organized by department.
+- Enables department specific user configurations (e.g. Drive Mapping)
+2. _Groups OU
+- Subdivided into DomainLocal OU and Global OU.
+- Domain Local Groups (DL_*): Used to assign permissions to resources (e.g. file shares)
+- Global Groups (GG_*): Contains user members organized by department/function.
+3. _Computers OU
+- Contains all workstations organized by department.
+- Enables department specific computer configurations (e.g. Security Settings)
 
-- **Domain Controllers** - Default OU for domain controllers
-- **Workstations** - All client computers
-  - **IT Department** - IT staff workstations
-  - **HR Department** - Human Resources workstations
-  - **Finance Department** - Finance team workstations
-- **Users** - All user accounts
-  - **IT Staff** - IT department users
-  - **HR Staff** - Human Resources users
-  - **Finance Staff** - Finance department users
-  - **Disabled Users** - Deactivated accounts
-
-This structure allows for granular Group Policy application and easier delegation of administrative tasks by department.
+This structure avoids directly assigning permissions to individual users and provides a scalable, maintainable approach to access management.
 
 ---
 
 ### Group Architecture
 
-![Group Architecture Diagram](images/Group_Architecture_Diagram.png)
+![Group Architecture Diagram](Group_Architecture_Diagram.png)
 
 #### Design Rationale
-[Explain your group strategy here. Example:]
+This implements the AGDLP (Account, Global, Domain Local, Permission) best practice:
+- Accounts (users) -> added to -> Global groups -> nested in -> Domain Local groups -> assigned Permissions.
+- Each department has access to its own shared drive, with the exception of the sales department.
+- The IT admin can access the shared drive of the IT department and has permission to remote access servers whereas IT support users may only access the shared drive.
 
-Groups follow the AGDLP (Account, Global, Domain Local, Permission) best practice:
-
-**Security Groups:**
-- **Domain Admins** - Full administrative access
-- **IT_Department** - IT staff with elevated permissions
-- **HR_Department** - HR users with access to HR resources
-- **Finance_Department** - Finance users with access to financial data
-- **All_Users** - Domain-wide policies for all users
-
-**Distribution Groups:**
-- **Company_All** - Email distribution for company-wide announcements
-
-This structure enables role-based access control and simplifies permission management.
+This approach simplifies permission management and scales well as the organization grows.
 
 ---
 
@@ -220,11 +218,10 @@ This structure enables role-based access control and simplifies permission manag
 **Purpose:** Enforce strong password requirements across the domain
 
 **Configuration:**
-- **Minimum password length:** 8 characters
+- **Minimum password length:** 12 characters
 - **Password complexity requirements:** Enabled
 - **Maximum password age:** 90 days
-- **Minimum password age:** 1 day
-- **Password history:** 5 passwords remembered
+- **Minimum password age:** 30 days
 
 **Applied to:** Default Domain Policy (all domain users)
 
@@ -234,13 +231,13 @@ This structure enables role-based access control and simplifies permission manag
 
 ![Desktop Wallpaper Policy](Setup_Screenshots/desktop_wallpaper_policy.png)
 
-**Purpose:** Standardize desktop appearance and display company branding
+**Purpose:** Standardize desktop appearance.
 
 **Configuration:**
-- **Wallpaper path:** \\\\DC01\\SYSVOL\\[domain]\\Wallpaper\\company_wallpaper.jpg
-- **Wallpaper style:** Fill
+- **Wallpaper path:** \\\\helplab.local\\SYSVOL\\helplab.local\\scripts\\wallpapers\\company_wallpaper.jpg
+- **Wallpaper style:** Center
 
-**Applied to:** All Users OU
+**Applied to:** _Users OU
 
 ---
 
@@ -251,10 +248,9 @@ This structure enables role-based access control and simplifies permission manag
 **Purpose:** Prevent data exfiltration and malware introduction via USB drives
 
 **Configuration:**
-- **Removable Disks: Deny read access:** Enabled
-- **Removable Disks: Deny write access:** Enabled
+- **All Removable Storage Classes: Deny all access** Enabled
 
-**Applied to:** HR and Finance OUs (sensitive data departments)
+**Applied to:** HR, Finance, and Sales OUs
 
 **Note:** IT department is excluded from this policy to allow administrative tasks.
 
@@ -268,9 +264,8 @@ This structure enables role-based access control and simplifies permission manag
 
 **Configuration:**
 - **Prohibit access to Control Panel and PC Settings:** Enabled
-- **Hide specified Control Panel items:** Display, Network Connections, System
 
-**Applied to:** Standard Users (non-IT staff)
+**Applied to:** HR, Finance, and Sales OUs (non-IT staff)
 
 ---
 
@@ -473,51 +468,11 @@ gpresult /h C:\report.html
 - Troubleshot common AD issues using built-in tools (gpresult, nslookup, etc.)
 
 ### Challenges Encountered
-- [Describe problems you faced and how you solved them]
+- Encountered issues with remote access due to installing portable version of OpenSSH.
 - Initial DNS configuration issues causing domain join failures - resolved by properly configuring DNS forwarders
-- Understanding GPO inheritance and precedence - used GPMC to visualize policy application
-- Managing static IPs without DHCP in lab environment - created documentation for IP assignments
-
-### Future Improvements
-- [What would you do differently or add next?]
-- Implement DHCP server role for dynamic IP assignment
-- Add second domain controller for redundancy and replication testing
-- Set up certificate services for SSL/TLS certificates
-- Create PowerShell scripts to automate user provisioning
-- Implement backup and disaster recovery procedures
-- Add additional client workstations to simulate larger environment
-
-### Real-World Applications
-- [How does this relate to actual IT work?]
-- User account management is a daily helpdesk task in enterprise environments
-- Group Policy management is critical for maintaining security and compliance standards
-- Troubleshooting domain connectivity issues mirrors real-world scenarios
-- Documentation practices developed here apply to professional IT operations
 
 ---
 
 ## Conclusion
 
 This Active Directory homelab provided hands-on experience with core identity and access management concepts used in enterprise environments. The combination of setup, configuration, and simulated helpdesk scenarios demonstrates both technical knowledge and practical troubleshooting skills essential for IT support roles.
-
-**Project Duration:** [X weeks/months]
-
-**Total Time Invested:** [X hours]
-
----
-
-## References & Resources
-
-- [Microsoft Active Directory Documentation](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/)
-- [Group Policy Planning and Deployment Guide](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/plan/group-policy-planning-and-deployment)
-- [Active Directory Best Practices](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/)
-
----
-
-**Author:** [Your Name]
-
-**Date:** [Project Completion Date]
-
-**GitHub Repository:** [Link to your repository]
-
-**Contact:** [Your email or LinkedIn]
