@@ -13,8 +13,8 @@
 
 ## Project Overview
 
-### Purpose
-[Brief explanation of why you built this lab and what skills you aimed to develop]
+### Description
+This homelab project demonstrates the design and implementation of an Active Directory environment for a multi-department organization. The lab simulates enterprise-scale user and computer management across Sales, Finance, HR, and IT departments with proper security controls and organizational structure.
 
 ### Key Objectives
 - Deploy and configure Active Directory Domain Services
@@ -30,10 +30,10 @@
 ![AD Homelab Network Diagram](AD_Homelab_Network.png)
 
 **Network Configuration:**
-- **Subnet:** 172.29.144.0/20
-- **Domain Controller IP:** 172.29.144.10 (Static)
-- **Client Workstation IP:** 172.29.144.20 (Static)
-- **Host Machine IP:** 172.29.144.1
+- **Subnet:** 172.16.0.0/24
+- **Domain Controller IP:** 172.16.0.2 (Static)
+- **Client Workstation IP:** 172.16.0.4 (Static)
+- **Internal Switch IP:** 172.16.0.1
 - **Domain Name:** HELPLAB.local
 
 ### Hardware & Virtualization Specifications
@@ -51,8 +51,8 @@
 - **RAM:** 4 GB
 - **vCPU:** 4 cores
 - **Storage:** 60 GB virtual disk
-- **Network:** Hyper-V Default Switch
-- **IP Address:** 172.29.144.10/20 (Static, no gateway)
+- **Network:** Hyper-V Internal Switch
+- **IP Address:** 172.16.0.2/24 (Static, no gateway)
 
 #### Client Workstation VM (Windows 11 Pro)
 - **Hostname:** WIN11-CLI-01
@@ -60,8 +60,8 @@
 - **RAM:** 4 GB
 - **vCPU:** 4 cores
 - **Storage:** 60 GB virtual disk
-- **Network:** Hyper-V Default Switch
-- **IP Address:** 172.29.144.20/20 (Static, no gateway)
+- **Network:** Hyper-V Internal Switch
+- **IP Address:** 172.16.0.4/24 (Static, no gateway)
 
 ### Server Roles & Services
 
@@ -269,11 +269,28 @@ This approach simplifies permission management and scales well as the organizati
 
 ---
 
+### 6. Mapping Shared Drive - Finance
+
+![Drive Mapping Policy](Setup_Screenshots/Mapping_Shared_Drive_Finance.png)
+
+**Purpose:** Enable Finance users to access shared Finance drive.
+
+**Configuration:**
+- **Letter:** F
+- **Location:** \\\\WIN-MEUJ3KPDEG5\\Finance
+- **Label as:** Finance Department
+- **Hide/Show this drive:** No change
+- **Hide/Show all drives:** No change
+
+**Applied to:** Finance OU
+
+---
+
 ## IT Helpdesk Scenarios
 
 ### Scenario 1: Password Reset Request
 
-**Ticket:** User Sarah Johnson (HR) forgot her password and is locked out
+**Ticket:** hr.user1 forgot their password and is locked out
 
 **Resolution Steps:**
 1. Verified user identity through security questions
@@ -286,16 +303,14 @@ This approach simplifies permission management and scales well as the organizati
 8. Verified user could log in and change password
 
 **Screenshots:**
-![Locked Account Status](Helpdesk_Screenshots/password_reset_01.png)
+![Locked Account Status](helpdesk_scenarios/locked_account.png)
 *Account showing locked status before reset*
 
-![Reset Password Dialog](Helpdesk_Screenshots/password_reset_02.png)
+![Reset Password Dialog](helpdesk_scenarios/unlock_account.png)
 *Resetting password and unlocking account*
 
-![Successful Login](Helpdesk_Screenshots/password_reset_03.png)
-*User successfully logged in with new password*
-
-**Time to Resolution:** 5 minutes
+![Change Password](helpdesk_scenarios/change_password.png)
+*User successfully changing password*
 
 ---
 
@@ -311,157 +326,120 @@ This approach simplifies permission management and scales well as the organizati
    - Email: jsmith@homelab.local
    - Initial password set with "must change at next logon"
 3. Added user to Finance_Department security group
-4. Configured profile settings (home folder path)
-5. Verified group membership and permissions
-6. Tested login from client workstation
-7. Confirmed access to Finance shared folder
-8. Notified manager that account is ready
+4. Verified group membership
+5. Tested login from client workstation
+6. Confirmed access to Finance shared folder
+7. Notified manager that account is ready
 
 **Screenshots:**
-![Create New User](Helpdesk_Screenshots/new_user_01.png)
+![Create New User](helpdesk_scenarios/new_user_01.png)
 *Creating new user account in Finance OU*
 
-![Group Membership](Helpdesk_Screenshots/new_user_02.png)
+![Group Membership](helpdesk_scenarios/new_user_02.png)
 *Adding user to Finance_Department group*
 
-![Shared Folder Access](Helpdesk_Screenshots/new_user_03.png)
+![Tested login](helpdesk_scenarios/new_user_03.png)
+*Testing new user login*
+
+![Shared Folder Access](helpdesk_scenarios/new_user_04.png)
 *Verifying access to Finance shared resources*
 
-**Time to Resolution:** 10 minutes
-
 ---
 
-### Scenario 3: User Offboarding
-
-**Ticket:** Employee Jane Doe (IT Department) has left the company - disable account and archive data
-
-**Resolution Steps:**
-1. Opened ADUC and located Jane Doe's account in IT Staff OU
-2. Disabled the user account (right-click → Disable Account)
-3. Updated account description with termination date and ticket number
-4. Removed user from all security groups except Domain Users
-5. Moved account to "Disabled Users" OU
-6. Documented group memberships before removal
-7. Reset password for security purposes
-8. Backed up user's home folder to archive location
-9. Notified manager and IT team of completion
-
-**Screenshots:**
-![Disable Account](Helpdesk_Screenshots/offboard_01.png)
-*Disabling terminated employee account*
-
-![Move to Disabled OU](Helpdesk_Screenshots/offboard_02.png)
-*Moving disabled account to Disabled Users OU*
-
-![Account Properties](Helpdesk_Screenshots/offboard_03.png)
-*Updated description documenting termination*
-
-**Time to Resolution:** 15 minutes
-
----
-
-### Scenario 4: Computer Unable to Join Domain
+### Scenario 3: Computer Unable to Join Domain
 
 **Ticket:** New workstation CLIENT02 cannot join the domain - receiving error message
 
 **Resolution Steps:**
 1. Verified network connectivity between client and DC (ping test)
-2. Confirmed DNS settings point to DC (172.29.144.10)
-3. Verified DC DNS records are correct in DNS Manager
-4. Used `nslookup` to test domain name resolution from client
-5. Checked that computer name doesn't already exist in AD
-6. Attempted domain join with domain admin credentials
-7. Reviewed error message - found workstation had incorrect DNS server
-8. Corrected DNS server setting to point to DC
-9. Successfully joined computer to domain
-10. Moved computer object to appropriate OU (IT Department workstations)
-11. Restarted computer and verified domain login
+2. Used `nslookup` to test domain name resolution from client
+3. Corrected DNS server setting to point to DC (172.16.0.2)
+5. Successfully joined computer to domain
+6. Moved computer object to appropriate OU (IT Department workstations)
+7. Restarted computer and verified domain login
 
 **Screenshots:**
-![Domain Join Error](Helpdesk_Screenshots/domain_join_01.png)
-*Initial domain join failure error*
+![Domain Join Error](helpdesk_scenarios/domain_join_01.png)
+*Initial domain join failure error. Notice it mentions "error occurred when DNS was queried" hinting that the DNS configuration may be the issue.*
 
-![DNS Troubleshooting](Helpdesk_Screenshots/domain_join_02.png)
+![Ping DC](helpdesk_scenarios/domain_join_02.png)
+*Ping the domain controller to ensure it is reachable*
+
+![DNS Troubleshooting](helpdesk_scenarios/domain_join_03.png)
 *Testing DNS resolution with nslookup*
 
-![Successful Domain Join](Helpdesk_Screenshots/domain_join_03.png)
-*Computer successfully joined to domain*
+![Change DNS settings](helpdesk_scenarios/domain_join_04.png)
+*Change DNS settings*
 
-**Time to Resolution:** 20 minutes
+![Successful Domain Join](helpdesk_scenarios/domain_join_05.png)
+*Computer successfully joined to domain*
 
 ---
 
-### Scenario 5: Group Policy Not Applying
+### Scenario 4: Group Policy Not Applying
 
 **Ticket:** User reports that desktop wallpaper policy is not applying to their workstation
 
 **Resolution Steps:**
 1. Logged into affected client workstation
-2. Opened Command Prompt as administrator
+2. Opened Command Prompt
 3. Ran `gpupdate /force` to force policy refresh
 4. Ran `gpresult /r` to view applied policies
-5. Found that computer object was in wrong OU (not linked to wallpaper GPO)
-6. Moved computer to correct OU in ADUC
+5. Found that user was in wrong OU (not linked to wallpaper GPO)
+6. Moved user to correct OU in ADUC
 7. Ran `gpupdate /force` again on client
-8. Verified policy application with `gpresult /h report.html`
+8. Verified policy application with `gpresult /r`
 9. Confirmed wallpaper changed after reboot
 10. Documented issue and resolution
 
 **Screenshots:**
-![GPResult Output](Helpdesk_Screenshots/gpo_troubleshoot_01.png)
-*Checking applied policies with gpresult*
+![GPResult Output](helpdesk_scenarios/gpo_troubleshoot_01.png)
+*Notice that there are no group policy objects applied to user*
 
-![Computer Moved to Correct OU](Helpdesk_Screenshots/gpo_troubleshoot_02.png)
-*Moving computer to OU with proper policy links*
+![User Moved to Correct OU](helpdesk_scenarios/gpo_troubleshoot_02.png)
+*Moving user to OU with proper policy links*
 
-![Policy Successfully Applied](Helpdesk_Screenshots/gpo_troubleshoot_03.png)
+![Policy Successfully Applied](helpdesk_scenarios/gpo_troubleshoot_03.png)
 *Verified wallpaper policy applied correctly*
 
 **Commands Used:**
 ```cmd
 gpupdate /force
 gpresult /r
-gpresult /h C:\report.html
 ```
-
-**Time to Resolution:** 12 minutes
 
 ---
 
-### Scenario 6: Shared Folder Permission Issue
+### Scenario 5: Shared Folder Permission Issue
 
-**Ticket:** User cannot access Finance shared folder despite being in Finance_Department group
+**Ticket:** Finance user cannot modify files in Finance shared folder
 
 **Resolution Steps:**
 1. Verified user's group membership in ADUC
 2. Confirmed user is member of Finance_Department security group
-3. Checked NTFS permissions on shared folder
-4. Checked Share permissions on folder
-5. Found that Finance_Department group had Read permissions but user needed Modify
-6. Updated Finance_Department permissions to "Modify" on NTFS level
-7. Informed user that permissions may take effect after logout/login
-8. User logged out and back in
-9. Verified user can now read, write, and modify files in shared folder
-10. Tested with creating and deleting test file
+3. Checked Share/NFTS permissions in Server Manager
+4. Found that Finance_Department group had Read permissions but user needed Modify
+5. Updated Finance_Department permissions to "Modify"
+6. Informed user that permissions may take effect after logout/login
+7. User logged out and back in
+8. Verified user can now read, write, and modify files in shared folder
+9. Tested with creating and deleting test file
 
 **Screenshots:**
-![Group Membership Verification](Helpdesk_Screenshots/permissions_01.png)
+![Group Membership Verification](helpdesk_scenarios/permissions_01.png)
 *Confirming user is in correct security group*
 
-![NTFS Permissions](Helpdesk_Screenshots/permissions_02.png)
+![Share Permissions](helpdesk_scenarios/permissions_02.png)
 *Reviewing and updating folder permissions*
 
-![Successful Access](Helpdesk_Screenshots/permissions_03.png)
+![Successful Access](helpdesk_scenarios/permissions_03.png)
 *User successfully accessing shared folder*
-
-**Time to Resolution:** 10 minutes
 
 ---
 
 ## Lessons Learned
 
 ### Technical Skills Gained
-- [List specific technical skills you developed]
 - Installed and configured Active Directory Domain Services from scratch
 - Designed and implemented OU structure following best practices
 - Created and linked Group Policy Objects for security and standardization
@@ -469,7 +447,7 @@ gpresult /h C:\report.html
 
 ### Challenges Encountered
 - Encountered issues with remote access due to installing portable version of OpenSSH.
-- Initial DNS configuration issues causing domain join failures - resolved by properly configuring DNS forwarders
+- Initial DNS configuration issues causing domain join failures - resolved by properly configuring internal network
 
 ---
 
