@@ -32,7 +32,7 @@ This homelab project demonstrates the design and implementation of an Active Dir
 **Network Configuration:**
 - **Subnet:** 172.16.0.0/24
 - **Domain Controller IP:** 172.16.0.2 (Static)
-- **Client Workstation IP:** 172.16.0.4 (Static)
+- **Client Workstation IPs:** 172.16.0.3, 172.16.0.4 (Static)
 - **Internal Switch IP:** 172.16.0.1
 - **Domain Name:** HELPLAB.local
 
@@ -54,7 +54,7 @@ This homelab project demonstrates the design and implementation of an Active Dir
 - **Network:** Hyper-V Internal Switch
 - **IP Address:** 172.16.0.2/24 (Static, no gateway)
 
-#### Client Workstation VM (Windows 11 Pro)
+#### Client Workstation VM #1 (Windows 11 Pro)
 - **Hostname:** WIN11-CLI-01
 - **Operating System:** Windows 11 Pro
 - **RAM:** 4 GB
@@ -62,6 +62,15 @@ This homelab project demonstrates the design and implementation of an Active Dir
 - **Storage:** 60 GB virtual disk
 - **Network:** Hyper-V Internal Switch
 - **IP Address:** 172.16.0.4/24 (Static, no gateway)
+
+#### Client Workstation VM #2 (Windows 11 Pro)
+- **Hostname:** WIN11-CLI-02
+- **Operating System:** Windows 11 Pro
+- **RAM:** 4 GB
+- **vCPU:** 4 cores
+- **Storage:** 60 GB virtual disk
+- **Network:** Hyper-V Internal Switch
+- **IP Address:** 172.16.0.3/24 (Static, no gateway)
 
 ### Server Roles & Services
 
