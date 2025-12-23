@@ -61,7 +61,7 @@ This homelab project demonstrates the design and implementation of an Active Dir
 - **vCPU:** 4 cores
 - **Storage:** 60 GB virtual disk
 - **Network:** Hyper-V Internal Switch
-- **IP Address:** 172.16.0.4/24 (Static, no gateway)
+- **IP Address Range:** 172.16.0.100 - 172.16.0.200 (Dynamic - DHCP, no gateway)
 
 #### Client Workstation VM #2 (Windows 11 Pro)
 - **Hostname:** WIN11-CLI-02
@@ -70,17 +70,20 @@ This homelab project demonstrates the design and implementation of an Active Dir
 - **vCPU:** 4 cores
 - **Storage:** 60 GB virtual disk
 - **Network:** Hyper-V Internal Switch
-- **IP Address:** 172.16.0.3/24 (Static, no gateway)
+- **IP Address Range:** 172.16.0.100 - 172.16.0.200 (Dynamic - DHCP, no gateway)
 
 ### Server Roles & Services
 
 The Domain Controller hosts multiple roles:
 - **Active Directory Domain Services (AD DS)** - Directory services and domain management
 - **DNS Server** - Name resolution for the domain
+- **DHCP Server** - Dynamic IP addressing
 - **File and Storage Services** - Shared folders and file permissions
 - **Group Policy Management** - Centralized policy deployment
 
 ---
+
+**Important Update:** Later added the DHCP role and configured DHCP scope. Not included in steps below.
 
 ## Installation & Configuration
 
