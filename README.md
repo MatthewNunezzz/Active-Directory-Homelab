@@ -32,7 +32,7 @@ This homelab project demonstrates the design and implementation of an Active Dir
 **Network Configuration:**
 - **Subnet:** 172.16.0.0/24
 - **Domain Controller IP:** 172.16.0.2 (Static)
-- **Client Workstation IPs:** 172.16.0.3, 172.16.0.4 (Static)
+- **DHCP scope:** 172.16.0.100 - 172.16.0.200
 - **Internal Switch IP:** 172.16.0.1
 - **Domain Name:** HELPLAB.local
 
