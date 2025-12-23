@@ -1,0 +1,11 @@
+SamAccountName,OU,Group
+hr.user3,HR,GG_HR_Users
+hr.user4,HR,GG_HR_Users
+finance.user3,Finance,GG_Finance_Users
+finance.user4,Finance,GG_Finance_Users
+sales.user4,Sales,GG_Sales_Users
+sales.user5,Sales,GG_Sales_Users
+sales.user6,Sales,GG_Sales_Users
+it.support3,IT,GG_IT_Support
+it.support4,IT,GG_IT_Support
+it.admin2,IT,GG_IT_Admin
