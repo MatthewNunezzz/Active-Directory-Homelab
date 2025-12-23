@@ -90,25 +90,25 @@ The Domain Controller hosts multiple roles:
 ### 1. Installing Active Directory Domain Services
 
 #### Step 1: Add the AD DS Role
-![Open Server Manager](Setup_Screenshots/Install_AD_01.png)
+![Open Server Manager](screenshots/lab_setup/Install_AD_01.png)
 *Open Server Manager and click "Add roles and features"*
 
-![Click Manage](Setup_Screenshots/Install_AD_02.png)
+![Click Manage](screenshots/lab_setup/Install_AD_02.png)
 *Click Manage in the upper right-hand corner and select "Add roles and features"*
 
-![Before you Begin](Setup_Screenshots/Install_AD_03.png)
+![Before you Begin](screenshots/lab_setup/Install_AD_03.png)
 *Select Next*
 
-![Installation Type](Setup_Screenshots/Install_AD_04.png)
+![Installation Type](screenshots/lab_setup/Install_AD_04.png)
 *Select "Role-based or feature-based installation" and click "Next"*
 
-![Server Selection](Setup_Screenshots/Install_AD_05.png)
+![Server Selection](screenshots/lab_setup/Install_AD_05.png)
 *Click "Select a server from server pool" and select intended server from server pool. Click "Next"*
 
-![Server Roles](Setup_Screenshots/Install_AD_06.png)
+![Server Roles](screenshots/lab_setup/Install_AD_06.png)
 *Ensure both roles: "Active Directory Domain Services" and "DNS Server" are checked. Click "Next"*
 
-![Features](Setup_Screenshots/Install_AD_07.png)
+![Features](screenshots/lab_setup/Install_AD_07.png)
 *Ensure that "Group Policy Management" is checked. Click "Next".*
 
 #### Final Steps:
@@ -120,15 +120,15 @@ The Domain Controller hosts multiple roles:
 ### 2. Promoting Server to Domain Controller
 
 #### Step 1: Post-Deployment Configuration
-![Promote to DC - Notification](Setup_Screenshots/Promote_DC_01.png)
+![Promote to DC - Notification](screenshots/lab_setup/Promote_DC_01.png)
 *Select "Promote this server to a domain controller"*
 
 #### Step 2: Deployment Configuration
-![New Forest Configuration](Setup_Screenshots/Promote_DC_02.png)
+![New Forest Configuration](screenshots/lab_setup/Promote_DC_02.png)
 *Select "Add a new forest" and enter your root domain name (e.g., homelab.local)*
 
 #### Step 3: Domain Controller Options
-![DC Options](Setup_Screenshots/Promote_DC_03.png)
+![DC Options](screenshots/lab_setup/Promote_DC_03.png)
 *Set Forest and Domain functional levels, configure DSRM password*
 
 #### Step 4: Review and Install
@@ -143,25 +143,25 @@ The Domain Controller hosts multiple roles:
 
 To configure the DC as the primary DNS server for the network:
 
-![Control Panel - Network Connections](Setup_Screenshots/DNS_setup_01.png)
+![Control Panel - Network Connections](screenshots/lab_setup/DNS_setup_01.png)
 *Navigate to Control Panel > Network and Internet*
 
-![Adapter Properties](Setup_Screenshots/DNS_setup_02.png)
+![Adapter Properties](screenshots/lab_setup/DNS_setup_02.png)
 *Navigate to Network and Sharing Center*
 
-![IPv4 Properties](Setup_Screenshots/DNS_setup_03.png)
+![IPv4 Properties](screenshots/lab_setup/DNS_setup_03.png)
 *Select "Change adapter settings" in the side panel*
 
-![DNS Server Settings](Setup_Screenshots/DNS_setup_04.png)
+![DNS Server Settings](screenshots/lab_setup/DNS_setup_04.png)
 *Double-click "Ethernet"*
 
-![Verify DNS Settings](Setup_Screenshots/DNS_setup_05.png)
+![Verify DNS Settings](screenshots/lab_setup/DNS_setup_05.png)
 *Select "Properties"*
 
-![Test DNS Resolution](Setup_Screenshots/DNS_setup_06.png)
+![Test DNS Resolution](screenshots/lab_setup/DNS_setup_06.png)
 *Select "Internet Protocol Version 4 (TCP/IPv4)" and click "Properties"*
 
-![DNS Manager Console](Setup_Screenshots/DNS_setup_07.png)
+![DNS Manager Console](screenshots/lab_setup/DNS_setup_07.png)
 *Enter in desired static ip address and subnet mask. Leave default gateway empty. Set preferred DNS server to 127.0.0.1 .*
 *Click "OK" and run `nslookup` in command prompt to verify DNS resolution*
 
@@ -171,7 +171,7 @@ To configure the DC as the primary DNS server for the network:
 
 ### Organizational Unit (OU) Design
 
-![OU Structure Diagram](AD_User_Computers_diagram.png)
+![OU Structure Diagram](AD_OU_diagram.png)
 
 #### Design Rationale
 
@@ -210,7 +210,7 @@ This approach simplifies permission management and scales well as the organizati
 
 ### 1. Account Lockout Policy
 
-![Account Lockout Policy](Setup_Screenshots/account_lockout_policy.png)
+![Account Lockout Policy](screenshots/lab_setup/account_lockout_policy.png)
 
 **Purpose:** Protect against brute-force password attacks
 
@@ -225,7 +225,7 @@ This approach simplifies permission management and scales well as the organizati
 
 ### 2. Password Policy
 
-![Password Policy](Setup_Screenshots/password_policy.png)
+![Password Policy](screenshots/lab_setup/password_policy.png)
 
 **Purpose:** Enforce strong password requirements across the domain
 
@@ -241,7 +241,7 @@ This approach simplifies permission management and scales well as the organizati
 
 ### 3. Desktop Wallpaper Policy
 
-![Desktop Wallpaper Policy](Setup_Screenshots/desktop_wallpaper_policy.png)
+![Desktop Wallpaper Policy](screenshots/lab_setup/desktop_wallpaper_policy.png)
 
 **Purpose:** Standardize desktop appearance.
 
@@ -255,7 +255,7 @@ This approach simplifies permission management and scales well as the organizati
 
 ### 4. Disable USB Storage Devices
 
-![Disable USB Policy](Setup_Screenshots/disable_usb_policy.png)
+![Disable USB Policy](screenshots/lab_setup/disable_usb_policy.png)
 
 **Purpose:** Prevent data exfiltration and malware introduction via USB drives
 
@@ -270,7 +270,7 @@ This approach simplifies permission management and scales well as the organizati
 
 ### 5. Restrict Control Panel Access
 
-![Restrict Control Panel Policy](Setup_Screenshots/restrict_control_panel_policy.png)
+![Restrict Control Panel Policy](screenshots/lab_setup/restrict_control_panel_policy.png)
 
 **Purpose:** Limit user ability to modify system settings
 
@@ -283,7 +283,7 @@ This approach simplifies permission management and scales well as the organizati
 
 ### 6. Mapping Shared Drive - Finance
 
-![Drive Mapping Policy](Setup_Screenshots/Mapping_Shared_Drive_Finance.png)
+![Drive Mapping Policy](screenshots/lab_setup/Mapping_Shared_Drive_Finance.png)
 
 **Purpose:** Enable Finance users to access shared Finance drive.
 
@@ -315,13 +315,13 @@ This approach simplifies permission management and scales well as the organizati
 8. Verified user could log in and change password
 
 **Screenshots:**
-![Locked Account Status](helpdesk_scenarios/locked_account.png)
+![Locked Account Status](screenshots/helpdesk_scenarios/locked_account.png)
 *Account showing locked status before reset*
 
-![Reset Password Dialog](helpdesk_scenarios/unlock_account.png)
+![Reset Password Dialog](screenshots/helpdesk_scenarios/unlock_account.png)
 *Resetting password and unlocking account*
 
-![Change Password](helpdesk_scenarios/change_password.png)
+![Change Password](screenshots/helpdesk_scenarios/change_password.png)
 *User successfully changing password*
 
 ---
@@ -344,16 +344,16 @@ This approach simplifies permission management and scales well as the organizati
 7. Notified manager that account is ready
 
 **Screenshots:**
-![Create New User](helpdesk_scenarios/new_user_01.png)
+![Create New User](screenshots/helpdesk_scenarios/new_user_01.png)
 *Creating new user account in Finance OU*
 
-![Group Membership](helpdesk_scenarios/new_user_02.png)
+![Group Membership](screenshots/helpdesk_scenarios/new_user_02.png)
 *Adding user to Finance_Department group*
 
-![Tested login](helpdesk_scenarios/new_user_03.png)
+![Tested login](screenshots/helpdesk_scenarios/new_user_03.png)
 *Testing new user login*
 
-![Shared Folder Access](helpdesk_scenarios/new_user_04.png)
+![Shared Folder Access](screenshots/helpdesk_scenarios/new_user_04.png)
 *Verifying access to Finance shared resources*
 
 ---
@@ -371,19 +371,19 @@ This approach simplifies permission management and scales well as the organizati
 7. Restarted computer and verified domain login
 
 **Screenshots:**
-![Domain Join Error](helpdesk_scenarios/domain_join_01.png)
+![Domain Join Error](screenshots/helpdesk_scenarios/domain_join_01.png)
 *Initial domain join failure error. Notice it mentions "error occurred when DNS was queried" hinting that the DNS configuration may be the issue.*
 
-![Ping DC](helpdesk_scenarios/domain_join_02.png)
+![Ping DC](screenshots/helpdesk_scenarios/domain_join_02.png)
 *Ping the domain controller to ensure it is reachable*
 
-![DNS Troubleshooting](helpdesk_scenarios/domain_join_03.png)
+![DNS Troubleshooting](screenshots/helpdesk_scenarios/domain_join_03.png)
 *Testing DNS resolution with nslookup*
 
-![Change DNS settings](helpdesk_scenarios/domain_join_04.png)
+![Change DNS settings](screenshots/helpdesk_scenarios/domain_join_04.png)
 *Change DNS settings*
 
-![Successful Domain Join](helpdesk_scenarios/domain_join_05.png)
+![Successful Domain Join](screenshots/helpdesk_scenarios/domain_join_05.png)
 *Computer successfully joined to domain*
 
 ---
@@ -405,13 +405,13 @@ This approach simplifies permission management and scales well as the organizati
 10. Documented issue and resolution
 
 **Screenshots:**
-![GPResult Output](helpdesk_scenarios/gpo_troubleshoot_01.png)
+![GPResult Output](screenshots/helpdesk_scenarios/gpo_troubleshoot_01.png)
 *Notice that there are no group policy objects applied to user*
 
-![User Moved to Correct OU](helpdesk_scenarios/gpo_troubleshoot_02.png)
+![User Moved to Correct OU](screenshots/helpdesk_scenarios/gpo_troubleshoot_02.png)
 *Moving user to OU with proper policy links*
 
-![Policy Successfully Applied](helpdesk_scenarios/gpo_troubleshoot_03.png)
+![Policy Successfully Applied](screenshots/helpdesk_scenarios/gpo_troubleshoot_03.png)
 *Verified wallpaper policy applied correctly*
 
 **Commands Used:**
@@ -438,13 +438,13 @@ gpresult /r
 9. Tested with creating and deleting test file
 
 **Screenshots:**
-![Group Membership Verification](helpdesk_scenarios/permissions_01.png)
+![Group Membership Verification](screenshots/helpdesk_scenarios/permissions_01.png)
 *Confirming user is in correct security group*
 
-![Share Permissions](helpdesk_scenarios/permissions_02.png)
+![Share Permissions](screenshots/helpdesk_scenarios/permissions_02.png)
 *Reviewing and updating folder permissions*
 
-![Successful Access](helpdesk_scenarios/permissions_03.png)
+![Successful Access](screenshots/helpdesk_scenarios/permissions_03.png)
 *User successfully accessing shared folder*
 
 ---
