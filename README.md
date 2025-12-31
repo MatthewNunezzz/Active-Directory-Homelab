@@ -216,8 +216,8 @@ This approach simplifies permission management and scales well as the organizati
 
 **Configuration:**
 - **Account lockout threshold:** 5 invalid logon attempts
-- **Account lockout duration:** 30 minutes
-- **Reset account lockout counter after:** 30 minutes
+- **Account lockout duration:** 15 minutes
+- **Reset account lockout counter after:** 15 minutes
 
 **Applied to:** Default Domain Policy (all domain users)
 
